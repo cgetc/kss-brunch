@@ -1,0 +1,9 @@
+{
+  "plugins": {
+    "kss": {
+      "destination": "tests/out",
+      "css": "tests/assets/css/test.css",
+      "title": "test"
+    }
+  }
+}

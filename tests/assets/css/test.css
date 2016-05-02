@@ -1,0 +1,14 @@
+/*
+Button
+
+Markup:
+<button>test</button>
+
+Styleguide 0.0.1
+*/
+button {
+  border : 1px solid gray;
+  border-radius: 5px;
+  text-align: center;
+  margin: 1em;
+}
