@@ -1,7 +1,7 @@
 'use strict';
 
 import { expect } from 'chai';
-import Plugin from '../';
+import Plugin from '../src/index';
 import fs from 'fs';
 import config from './config';
 
