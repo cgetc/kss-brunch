@@ -1,8 +1,20 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _assign = require('babel-runtime/core-js/object/assign');
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _assign2 = _interopRequireDefault(_assign);
+
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
 
 var _path = require('path');
 
@@ -14,25 +26,47 @@ var _kss2 = _interopRequireDefault(_kss);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 var KSSCompiler = function () {
   function KSSCompiler(config) {
-    _classCallCheck(this, KSSCompiler);
+    (0, _classCallCheck3.default)(this, KSSCompiler);
 
     this.config = config && config.plugins && config.plugins.kss;
+    this._running = [];
   }
 
-  _createClass(KSSCompiler, [{
+  (0, _createClass3.default)(KSSCompiler, [{
     key: 'compile',
     value: function compile(file) {
-      var options = _extends(this.config, {
-        source: _path2.default.dirname(file.path)
+      var _this = this;
+
+      var dir = _path2.default.resolve(_path2.default.dirname(file.path));
+      if (this._is_running(dir)) {
+        return _promise2.default.resolve();
+      }
+      this._running.push(dir);
+      var options = (0, _assign2.default)({
+        source: dir
+      }, this.config);
+      return (0, _kss2.default)(options).then(function () {
+        _this._running = _this._running.filter(function (entry) {
+          return entry != dir;
+        });
+        return _promise2.default.resolve();
       });
-      return (0, _kss2.default)(options);
+    }
+  }, {
+    key: '_is_running',
+    value: function _is_running(dir) {
+      var exists = false;
+      this._running.forEach(function (entry) {
+        if (dir.indexOf(dir) === 0) {
+          exists = true;
+          return false;
+        }
+      });
+      return exists;
     }
   }]);
-
   return KSSCompiler;
 }();
 
